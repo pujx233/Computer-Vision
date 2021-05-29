@@ -1,48 +1,20 @@
-import torch.utils.data as data
-from glob import glob
-from PIL import Image
-import torchvision.transforms as transforms
-import argparse
 import os
-import imageio
 
+path = input('请输入文件路径(结尾加上/)：')
 
-class DataSet(data.Dataset):
-    def __init__(self, img_dir, resize):
-        super(DataSet, self).__init__()
-        self.img_paths = glob('{:s}/*'.format(img_dir))
-        self.transform = transforms.Compose([transforms.Resize(size=(resize, resize))])
+# 获取该目录下所有文件，存入列表中
+f = os.listdir(path)
 
-    def __getitem__(self, item):
-        img = Image.open(self.img_paths[item]).convert('RGB')
-        img = self.transform(img)
+n = 0
+for i in f:
+    # 设置旧文件名（就是路径+文件名）
+    oldname = path + f[n]
 
-        return img, self.img_paths[item]
+    # 设置新文件名
+    newname = oldname.replace("png", "jpg")
 
-    def __len__(self):
-        return len(self.img_paths)
+    # 用os模块中的rename方法对文件改名
+    os.rename(oldname, newname)
+    print(oldname, '======>', newname)
 
-
-if __name__ == '__main__':
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--img_dir', type=str, default='val/annotations_trainval')
-    parser.add_argument('--resize', type=int, default=512)
-    parser.add_argument('--save_dir', type=str, default='val/annotations_trainval_1')
-    args = parser.parse_args()
-
-    if not os.path.exists(args.save_dir):
-        os.mkdir(args.save_dir)
-    dataset = DataSet(args.img_dir, args.resize)
-    print('dataset:', len(dataset))
-
-    for i in range(len(dataset)):
-        img, path = dataset[i]
-        path = os.path.basename(path)
-        print('Processing:', path)
-
-        imageio.imwrite(args.save_dir+'/{:s}'.format(path), img)
-
-
-
-
+    n += 1
