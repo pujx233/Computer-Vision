@@ -11,7 +11,7 @@ class DataSet(data.Dataset):
     def __init__(self, img_dir, resize):
         super(DataSet, self).__init__()
         self.img_paths = glob('{:s}/*'.format(img_dir))
-        self.transform = transforms.Compose([transforms.Resize(size=(resize, resize)), ])
+        self.transform = transforms.Compose([transforms.Resize(size=(resize, resize))])
 
     def __getitem__(self, item):
         img = Image.open(self.img_paths[item]).convert('RGB')
@@ -27,10 +27,10 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--img_dir', type=str,
-                        default='C:/Users/10758/Desktop/Computer-Vision/train/annotations_trainval')
-    parser.add_argument('--resize', type=int, default=500)
+                        default='C:\\Users\\10758\\Desktop\\Computer-Vision\\train\\image')
+    parser.add_argument('--resize', type=int, default=512)
     parser.add_argument('--save_dir', type=str,
-                        default='C:/Users/10758/Desktop/Computer-Vision/train/annotations_trainval_1')
+                        default='C:\\Users\\10758\\Desktop\\Computer-Vision\\train\\image_1')
     args = parser.parse_args()
 
     if not os.path.exists(args.save_dir):
